@@ -17,7 +17,9 @@ It includes:
 
 ## 🧪 Running the Tests
 
-1. Install `pytest` if you haven't already:
+1. Install `pytest` if you haven't already, and then put in terminal:
    ```bash
-   pip install pytest
+   pytest -v test_goldwaseer_micali.py
+
+   
 
