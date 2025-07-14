@@ -21,5 +21,3 @@ It includes:
    ```bash
    pytest -v test_goldwaseer_micali.py
 
-   
-
