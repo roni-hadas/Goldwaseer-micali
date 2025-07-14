@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 from random import randint
 from functools import reduce
 
@@ -176,3 +178,12 @@ def decrypt_cipher(cipher: list[int], priv_key) -> str:
 
     bit_str = ''.join('1' if decrypt_bit(c) else '0' for c in cipher)
     return decode_ascii_number(int(bit_str, 2))
+
+def sign_message(secret_key: bytes, message: str) -> str:
+    return hmac.new(secret_key, message.encode(), hashlib.sha256).hexdigest()
+
+def verify_signature(secret_key: bytes, message: str, signature: str) -> bool:
+    return hmac.compare_digest(
+        hmac.new(secret_key, message.encode(), hashlib.sha256).hexdigest(),
+        signature
+    )

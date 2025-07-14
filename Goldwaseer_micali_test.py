@@ -9,6 +9,8 @@ from Goldwaseer_micali_main import (
     encode_ascii_string,
     decode_ascii_number,
     jacobi_symbol,
+    sign_message,
+    verify_signature
 )
 
 def self_test_one(prime_size=6, seed=0):
@@ -75,4 +77,27 @@ def test_large_messages(msg):
     ct = encrypt_string(msg, keys["pub"])
     out = decrypt_cipher(ct, keys["priv"])
     assert out == msg
+
+def test_signed_encrypted_communication():
+    # 1. Alice wants to send a message securely
+    secret_key = b'shared_key'  # shared secret between Alice and Bob
+    message = "Meet me at the park at noon."
+
+    # 2. Alice generates keypair and encrypts the message
+    keypair = generate_keypair(10)
+    ciphertext = encrypt_string(message, keypair['pub'])
+
+    # 3. Alice signs the original (plaintext) message
+    signature = sign_message(secret_key, message)
+
+    # === Transmission happens here (ciphertext + signature sent to Bob) ===
+
+    # 4. Bob decrypts
+    decrypted = decrypt_cipher(ciphertext, keypair['priv'])
+
+    # 5. Bob verifies the signature
+    assert verify_signature(secret_key, decrypted, signature), "Signature verification failed"
+
+    # 6. Confirm that the decrypted message matches
+    assert decrypted == message, "Decrypted message mismatch"
 
